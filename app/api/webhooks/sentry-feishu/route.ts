@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getErrorNoticeCard } from "../../../../utils/feishu/card";
 
+// 使用位置 https://bowen01.sentry.io/settings/developer-settings/feisu_notice-d960e5/
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
