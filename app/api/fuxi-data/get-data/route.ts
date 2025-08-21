@@ -17,6 +17,30 @@ export async function GET(request: NextRequest) {
 
     // 获取查询参数
     const { searchParams } = new URL(request.url);
+    const id = searchParams.get('id');
+    
+    // 如果有 id 参数，根据 id 查询单条记录
+    if (id) {
+      const result = await sql`
+        SELECT * 
+        FROM "FuxiData" 
+        WHERE id = ${id}
+      `;
+      
+      if (result.length === 0) {
+        return NextResponse.json(
+          { error: 'Record not found' },
+          { status: 404 }
+        );
+      }
+      
+      return NextResponse.json({
+        success: true,
+        data: result[0]
+      });
+    }
+    
+    // 如果没有 id 参数，使用原有的分页查询逻辑
     const limit = searchParams.get('limit') || '10';
     const offset = searchParams.get('offset') || '0';
     const limitNum = Math.min(parseInt(limit, 10), 100); // 最多返回100条
@@ -24,7 +48,7 @@ export async function GET(request: NextRequest) {
 
     // 查询数据，按时间倒序排列
     const result = await sql`
-      SELECT * 
+      SELECT id, time, type
       FROM "FuxiData" 
       ORDER BY time DESC 
       LIMIT ${limitNum} 
