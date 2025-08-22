@@ -48,7 +48,7 @@ export async function GET(request: NextRequest) {
 
     // 查询数据，按时间倒序排列
     const result = await sql`
-      SELECT id, time, type, data
+      SELECT id, time, type
       FROM "FuxiData" 
       ORDER BY time DESC 
       LIMIT ${limitNum} 
