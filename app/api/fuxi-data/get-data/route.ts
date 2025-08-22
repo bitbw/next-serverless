@@ -46,11 +46,10 @@ export async function GET(request: NextRequest) {
     const limitNum = Math.min(parseInt(limit, 10), 100); // 最多返回100条
     const offsetNum = parseInt(offset, 10);
 
-    // 查询数据，按时间倒序排列
+    // 查询数据，按时间倒序排列   ORDER BY time DESC 
     const result = await sql`
       SELECT id, time, type
       FROM "FuxiData" 
-      ORDER BY time DESC 
       LIMIT ${limitNum} 
       OFFSET ${offsetNum}
     `;
