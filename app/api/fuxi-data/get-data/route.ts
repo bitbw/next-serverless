@@ -18,6 +18,9 @@ export async function GET(request: NextRequest) {
     // 获取查询参数
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
+    const type = searchParams.get('type');
+    
+    console.log('Query parameters:', { id, type });
     
     // 如果有 id 参数，根据 id 查询单条记录
     if (id) {
@@ -37,6 +40,26 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({
         success: true,
         data: result[0]
+      });
+    }
+    
+    // 如果有 type 参数，根据 type 查询所有匹配的记录
+    if (type) {
+      console.log('Querying by type:', type);
+      const result = await sql`
+        SELECT * 
+        FROM "FuxiData" 
+        WHERE type = ${type}
+      `;
+      
+      console.log('Type query result:', result.length, 'records found');
+      
+      return NextResponse.json({
+        success: true,
+        data: result,
+        total: result.length,
+        message: `Found ${result.length} records with type: ${type}`,
+        queryType: 'type'
       });
     }
     
