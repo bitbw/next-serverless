@@ -50,6 +50,7 @@ export async function GET(request: NextRequest) {
         SELECT * 
         FROM "FuxiData" 
         WHERE type = ${type}
+        ORDER BY id ASC
       `;
       
       console.log('Type query result:', result.length, 'records found');
