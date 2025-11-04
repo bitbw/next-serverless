@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>通用查询 API 测试</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      padding: 20px;
+      background: #f5f5f5;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #0070f3;
+      padding-bottom: 10px;
+    }
+
+    .section {
+      margin-bottom: 30px;
+    }
+
+    .section h2 {
+      color: #666;
+      margin-bottom: 15px;
+      font-size: 18px;
+    }
+
+    .input-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: #333;
+      font-weight: 500;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+      font-family: 'Courier New', monospace;
+      min-height: 200px;
+      resize: vertical;
+    }
+
+    button {
+      background: #0070f3;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-right: 10px;
+      margin-bottom: 10px;
+    }
+
+    button:hover {
+      background: #0051cc;
+    }
+
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 4px;
+      background: #f9f9f9;
+      border: 1px solid #ddd;
+    }
+
+    .result.success {
+      background: #d4edda;
+      border-color: #c3e6cb;
+      color: #155724;
+    }
+
+    .result.error {
+      background: #f8d7da;
+      border-color: #f5c6cb;
+      color: #721c24;
+    }
+
+    .result pre {
+      margin-top: 10px;
+      padding: 10px;
+      background: #fff;
+      border-radius: 4px;
+      overflow-x: auto;
+      font-size: 12px;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: bold;
+      margin-left: 10px;
+    }
+
+    .status.success {
+      background: #28a745;
+      color: white;
+    }
+
+    .status.error {
+      background: #dc3545;
+      color: white;
+    }
+
+    .loading {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid #f3f3f3;
+      border-top: 2px solid #0070f3;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-left: 10px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .filter-item {
+      background: #f9f9f9;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+    }
+
+    .filter-item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .filter-row {
+      display: grid;
+      grid-template-columns: 2fr 1.5fr 2fr;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .remove-filter {
+      background: #dc3545;
+      padding: 5px 10px;
+      font-size: 12px;
+    }
+
+    .add-filter {
+      background: #28a745;
+      padding: 5px 10px;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🧪 通用查询 API 测试工具</h1>
+
+    <div class="section">
+      <h2>API 配置</h2>
+      <div class="input-group">
+        <label for="apiUrl">API 基础 URL:</label>
+        <input type="text" id="apiUrl" value="http://localhost:3000" placeholder="http://localhost:3000">
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>查询参数</h2>
+      
+      <div class="input-group">
+        <label for="tableName">表名 (tableName):</label>
+        <input type="text" id="tableName" value="FuxiData" placeholder="FuxiData">
+      </div>
+
+      <div class="input-group">
+        <label>过滤条件 (filters):</label>
+        <div id="filtersContainer">
+          <!-- 过滤条件将通过 JavaScript 动态添加 -->
+        </div>
+        <button type="button" class="add-filter" onclick="addFilter()">+ 添加过滤条件</button>
+      </div>
+
+      <div class="input-group">
+        <label for="logic">逻辑关系 (logic):</label>
+        <select id="logic">
+          <option value="AND" selected>AND</option>
+          <option value="OR">OR</option>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <label for="orderBy">排序字段 (orderBy):</label>
+        <input type="text" id="orderBy" value="time" placeholder="time">
+      </div>
+
+      <div class="input-group">
+        <label for="order">排序方向 (order):</label>
+        <select id="order">
+          <option value="DESC" selected>DESC</option>
+          <option value="ASC">ASC</option>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <label for="limit">限制数量 (limit):</label>
+        <input type="number" id="limit" value="20" placeholder="20">
+      </div>
+
+      <div class="input-group">
+        <label for="offset">偏移量 (offset):</label>
+        <input type="number" id="offset" value="0" placeholder="0">
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>操作</h2>
+      <button onclick="testQuery()">🚀 执行测试</button>
+      <button onclick="loadDefaultTest()">📋 加载默认测试数据</button>
+      <button onclick="clearResult()">🗑️ 清除结果</button>
+    </div>
+
+    <div class="section">
+      <h2>请求 JSON</h2>
+      <textarea id="requestJson" readonly></textarea>
+    </div>
+
+    <div class="section">
+      <h2>响应结果</h2>
+      <div id="result"></div>
+    </div>
+  </div>
+
+  <script>
+    let filterCount = 0;
+
+    // 默认测试数据
+    const defaultTestData = {
+      tableName: "FuxiData",
+      filters: [
+        { field: "type", operator: "=", value: "bumpy-map-record-point" },
+        { field: "time", operator: ">=", value: "2025-11-03 11:01:00.000" },
+        { field: "time", operator: "<=", value: "2025-11-03 11:14:00.000" }
+      ],
+      logic: "AND",
+      orderBy: "time",
+      order: "DESC",
+      limit: 20,
+      offset: 0
+    };
+
+    const operators = [
+      { value: "=", label: "equals (=)" },
+      { value: "<>", label: "not equals (<>)" },
+      { value: ">", label: "greater (>)" },
+      { value: ">=", label: "greater or equals (>=)" },
+      { value: "<", label: "less (<)" },
+      { value: "<=", label: "less or equals (<=)" },
+      { value: "LIKE", label: "like (LIKE)" },
+      { value: "ILIKE", label: "ilike (ILIKE)" },
+      { value: "NOT LIKE", label: "not like (NOT LIKE)" },
+      { value: "IN", label: "in (IN)" },
+      { value: "IS NULL", label: "is null (IS NULL)" },
+      { value: "IS NOT NULL", label: "is not null (IS NOT NULL)" }
+    ];
+
+    function addFilter(field = "", operator = "=", value = "") {
+      const filterId = `filter_${filterCount++}`;
+      const filterDiv = document.createElement('div');
+      filterDiv.className = 'filter-item';
+      filterDiv.id = filterId;
+      
+      filterDiv.innerHTML = `
+        <div class="filter-item-header">
+          <strong>过滤条件</strong>
+          <button type="button" class="remove-filter" onclick="removeFilter('${filterId}')">删除</button>
+        </div>
+        <div class="filter-row">
+          <div>
+            <label>字段 (field):</label>
+            <input type="text" class="filter-field" value="${field}" placeholder="字段名">
+          </div>
+          <div>
+            <label>操作符 (operator):</label>
+            <select class="filter-operator">
+              ${operators.map(op => 
+                `<option value="${op.value}" ${op.value === operator ? 'selected' : ''}>${op.label}</option>`
+              ).join('')}
+            </select>
+          </div>
+          <div>
+            <label>值 (value):</label>
+            <input type="text" class="filter-value" value="${value}" placeholder="值（IN 操作符使用逗号分隔）">
+          </div>
+        </div>
+      `;
+      
+      document.getElementById('filtersContainer').appendChild(filterDiv);
+      updateRequestJson();
+    }
+
+    function removeFilter(filterId) {
+      document.getElementById(filterId).remove();
+      updateRequestJson();
+    }
+
+    function loadDefaultTest() {
+      document.getElementById('tableName').value = defaultTestData.tableName;
+      document.getElementById('logic').value = defaultTestData.logic;
+      document.getElementById('orderBy').value = defaultTestData.orderBy;
+      document.getElementById('order').value = defaultTestData.order;
+      document.getElementById('limit').value = defaultTestData.limit;
+      document.getElementById('offset').value = defaultTestData.offset;
+
+      // 清除现有过滤条件
+      document.getElementById('filtersContainer').innerHTML = '';
+      
+      // 添加默认过滤条件
+      defaultTestData.filters.forEach(filter => {
+        addFilter(filter.field, filter.operator, filter.value);
+      });
+    }
+
+    function getRequestData() {
+      const filters = [];
+      const filterItems = document.querySelectorAll('.filter-item');
+      
+      filterItems.forEach(item => {
+        const field = item.querySelector('.filter-field').value.trim();
+        const operator = item.querySelector('.filter-operator').value;
+        const valueInput = item.querySelector('.filter-value').value.trim();
+        
+        if (field) {
+          let value = valueInput;
+          
+          // 处理 IN 操作符的数组值
+          if (operator === 'IN' && valueInput.includes(',')) {
+            value = valueInput.split(',').map(v => v.trim()).filter(v => v);
+          }
+          
+          // 处理 IS NULL 和 IS NOT NULL
+          if (operator === 'IS NULL' || operator === 'IS NOT NULL') {
+            value = null;
+          }
+          
+          // 尝试转换数字
+          if (valueInput && !isNaN(valueInput) && operator !== 'IN') {
+            value = Number(valueInput);
+          }
+          
+          filters.push({ field, operator, value });
+        }
+      });
+
+      return {
+        tableName: document.getElementById('tableName').value || undefined,
+        filters: filters.length > 0 ? filters : undefined,
+        logic: document.getElementById('logic').value,
+        orderBy: document.getElementById('orderBy').value || undefined,
+        order: document.getElementById('order').value,
+        limit: document.getElementById('limit').value ? parseInt(document.getElementById('limit').value) : undefined,
+        offset: document.getElementById('offset').value ? parseInt(document.getElementById('offset').value) : undefined
+      };
+    }
+
+    function updateRequestJson() {
+      const data = getRequestData();
+      document.getElementById('requestJson').value = JSON.stringify(data, null, 2);
+    }
+
+    async function testQuery() {
+      const resultDiv = document.getElementById('result');
+      const apiUrl = document.getElementById('apiUrl').value;
+      const requestData = getRequestData();
+
+      // 显示加载状态
+      resultDiv.innerHTML = '<div class="result"><strong>正在请求...</strong><div class="loading"></div></div>';
+
+      try {
+        const startTime = Date.now();
+        const response = await fetch(`${apiUrl}/api/generic/query`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(requestData),
+        });
+
+        const endTime = Date.now();
+        const duration = endTime - startTime;
+
+        const result = await response.json();
+        
+        const statusClass = response.ok ? 'success' : 'error';
+        const statusText = response.ok ? '成功' : '失败';
+        
+        let html = `
+          <div class="result ${statusClass}">
+            <strong>
+              状态: ${response.status} ${response.statusText}
+              <span class="status ${statusClass}">${statusText}</span>
+            </strong>
+            <p>响应时间: ${duration}ms</p>
+        `;
+
+        if (response.ok) {
+          html += `
+            <p><strong>记录数:</strong> ${result.data?.length || 0}</p>
+            ${result.pagination ? `
+              <p><strong>分页信息:</strong></p>
+              <ul>
+                <li>总数: ${result.pagination.total}</li>
+                <li>限制: ${result.pagination.limit}</li>
+                <li>偏移: ${result.pagination.offset}</li>
+                <li>还有更多: ${result.pagination.hasMore ? '是' : '否'}</li>
+              </ul>
+            ` : ''}
+          `;
+        }
+
+        html += `
+            <pre>${JSON.stringify(result, null, 2)}</pre>
+          </div>
+        `;
+
+        resultDiv.innerHTML = html;
+
+      } catch (error) {
+        resultDiv.innerHTML = `
+          <div class="result error">
+            <strong>错误:</strong> ${error.message}
+            <pre>${error.stack || ''}</pre>
+          </div>
+        `;
+      }
+    }
+
+    function clearResult() {
+      document.getElementById('result').innerHTML = '';
+    }
+
+    // 监听输入变化，更新请求 JSON
+    ['tableName', 'logic', 'orderBy', 'order', 'limit', 'offset'].forEach(id => {
+      document.getElementById(id).addEventListener('input', updateRequestJson);
+      document.getElementById(id).addEventListener('change', updateRequestJson);
+    });
+
+    // 初始化：加载默认测试数据
+    window.addEventListener('DOMContentLoaded', () => {
+      loadDefaultTest();
+    });
+  </script>
+</body>
+</html>
+
