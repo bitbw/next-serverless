@@ -19,8 +19,10 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
     const type = searchParams.get('type');
+    const startTime = searchParams.get('startTime');
+    const endTime = searchParams.get('endTime');
     
-    console.log('Query parameters:', { id, type });
+    console.log('Query parameters:', { id, type, startTime, endTime });
     
     // 如果有 id 参数，根据 id 查询单条记录
     if (id) {
@@ -45,13 +47,46 @@ export async function GET(request: NextRequest) {
     
     // 如果有 type 参数，根据 type 查询所有匹配的记录
     if (type) {
-      console.log('Querying by type:', type);
-      const result = await sql`
-        SELECT * 
-        FROM "FuxiData" 
-        WHERE type = ${type}
-        ORDER BY id ASC
-      `;
+      console.log('Querying by type:', type, 'startTime:', startTime, 'endTime:', endTime);
+      
+      let result;
+      // 如果有时间范围参数，添加时间过滤
+      if (startTime || endTime) {
+        if (startTime && endTime) {
+          result = await sql`
+            SELECT * 
+            FROM "FuxiData" 
+            WHERE type = ${type}
+              AND time >= ${startTime}
+              AND time <= ${endTime}
+            ORDER BY id ASC
+          `;
+        } else if (startTime) {
+          result = await sql`
+            SELECT * 
+            FROM "FuxiData" 
+            WHERE type = ${type}
+              AND time >= ${startTime}
+            ORDER BY id ASC
+          `;
+        } else {
+          result = await sql`
+            SELECT * 
+            FROM "FuxiData" 
+            WHERE type = ${type}
+              AND time <= ${endTime}
+            ORDER BY id ASC
+          `;
+        }
+      } else {
+        // 没有时间范围参数，使用原来的查询
+        result = await sql`
+          SELECT * 
+          FROM "FuxiData" 
+          WHERE type = ${type}
+          ORDER BY id ASC
+        `;
+      }
       
       console.log('Type query result:', result.length, 'records found');
       
@@ -59,7 +94,7 @@ export async function GET(request: NextRequest) {
         success: true,
         data: result,
         total: result.length,
-        message: `Found ${result.length} records with type: ${type}`,
+        message: `Found ${result.length} records with type: ${type}${startTime || endTime ? ` (time range: ${startTime || 'any'} - ${endTime || 'any'})` : ''}`,
         queryType: 'type'
       });
     }
