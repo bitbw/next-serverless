@@ -22,7 +22,7 @@
 所有 API 都需要在环境变量中配置数据库连接字符串：
 
 ```env
-DATABASE_URL=postgresql://user:password@host/database
+DATABASE_URL2_DATABASE_URL=postgresql://user:password@host/database
 ```
 
 ## API 端点

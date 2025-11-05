@@ -151,10 +151,10 @@
 **问题**: `Database connection string not configured`
 
 **解决方案**:
-- 确保设置了 `DATABASE_URL` 环境变量
+- 确保设置了 `DATABASE_URL2_DATABASE_URL` 环境变量
 - 在 `.env.local` 文件中添加：
   ```
-  DATABASE_URL=postgresql://user:password@host/database
+  DATABASE_URL2_DATABASE_URL=postgresql://user:password@host/database
   ```
 
 ### 3. 表不存在错误

@@ -79,7 +79,7 @@ export async function POST(request: NextRequest) {
 
 async function executeQuery(params: QueryParams) {
   // 获取数据库连接字符串
-  const connectionString = process.env.DATABASE_URL;
+  const connectionString = process.env.DATABASE_URL2_DATABASE_URL;
   if (!connectionString) {
     return NextResponse.json(
       { error: 'Database connection string not configured' },
