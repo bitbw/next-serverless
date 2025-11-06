@@ -57,11 +57,11 @@ export async function POST(request: NextRequest) {
     }
 
     // 触发 Pusher 事件
-    await triggerPusherEvent(tableName, 'created', {
-      tableName,
-      ...fields,
-      id: result[0].id,
-    });
+    // await triggerPusherEvent(tableName, 'created', {
+    //   tableName,
+    //   ...fields,
+    //   id: result[0].id,
+    // });
 
     return NextResponse.json({
       success: true,

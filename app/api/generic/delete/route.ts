@@ -64,10 +64,10 @@ export async function DELETE(request: NextRequest) {
     }
 
     // 触发 Pusher 事件
-    await triggerPusherEvent(finalTableName, 'deleted', {
-      id,
-      tableName: finalTableName,
-    });
+    // await triggerPusherEvent(finalTableName, 'deleted', {
+    //   id,
+    //   tableName: finalTableName,
+    // });
 
     return NextResponse.json({
       success: true,
