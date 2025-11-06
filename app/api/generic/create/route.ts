@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { neon } from '@neondatabase/serverless';
+import { triggerPusherEvent } from '@/libs/pusher';
 
 /**
  * POST 创建接口
@@ -54,6 +55,13 @@ export async function POST(request: NextRequest) {
         { status: 500 }
       );
     }
+
+    // 触发 Pusher 事件
+    await triggerPusherEvent(tableName, 'created', {
+      tableName,
+      ...fields,
+      id: result[0].id,
+    });
 
     return NextResponse.json({
       success: true,

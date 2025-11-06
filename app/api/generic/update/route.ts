@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { neon } from '@neondatabase/serverless';
+import { triggerPusherEvent } from '@/libs/pusher';
 
 /**
  * PUT 更新接口
@@ -64,6 +65,13 @@ export async function PUT(request: NextRequest) {
         { status: 404 }
       );
     }
+
+    // 触发 Pusher 事件
+    await triggerPusherEvent(tableName, 'updated', {
+      id,
+      tableName,
+      ...fields,
+    });
 
     return NextResponse.json({
       success: true,

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { neon } from '@neondatabase/serverless';
+import { triggerPusherEvent } from '@/libs/pusher';
 
 /**
  * DELETE 删除接口
@@ -61,6 +62,12 @@ export async function DELETE(request: NextRequest) {
         { status: 404 }
       );
     }
+
+    // 触发 Pusher 事件
+    await triggerPusherEvent(finalTableName, 'deleted', {
+      id,
+      tableName: finalTableName,
+    });
 
     return NextResponse.json({
       success: true,
