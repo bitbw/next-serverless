@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { neon } from '@neondatabase/serverless';
-import { triggerPusherEvent } from '@/libs/pusher';
+// import { triggerPusherEvent } from '@/lib/pusher';
 
 /**
  * POST 创建接口

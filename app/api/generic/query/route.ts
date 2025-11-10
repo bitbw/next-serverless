@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { neon } from '@neondatabase/serverless';
-import { buildQuery, QueryParams } from '@/libs/db/query-builder';
+import { buildQuery, QueryParams } from '@/lib/db/query-builder';
 
 /**
  * GET 或 POST 查询接口

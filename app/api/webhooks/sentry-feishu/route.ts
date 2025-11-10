@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getErrorNoticeCard } from "@/libs/feishu/card";
+import { getErrorNoticeCard } from "@/lib/feishu/card";
 
 // 使用位置 https://bowen01.sentry.io/settings/developer-settings/feisu_notice-d960e5/
 
