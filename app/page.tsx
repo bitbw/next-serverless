@@ -8,11 +8,27 @@ import { ShimmerButton } from "@/components/shimmer-button";
 import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
 
+/** Career start: October 2017 (used only for year count, not shown in copy). */
+const CAREER_START = new Date(2017, 9, 1);
+
+function completedFullYearsSince(from: Date, asOf = new Date()): number {
+  let years = asOf.getFullYear() - from.getFullYear();
+  if (
+    asOf.getMonth() < from.getMonth() ||
+    (asOf.getMonth() === from.getMonth() && asOf.getDate() < from.getDate())
+  ) {
+    years -= 1;
+  }
+  return Math.max(0, years);
+}
+
 export default function HomePage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<
     "home" | "about" | "contact"
   >("home");
+
+  const careerYears = completedFullYearsSince(CAREER_START);
 
   const navButtonClass = (section: "home" | "about" | "contact") => {
     return `cursor-pointer transition-colors text-sm lg:text-base ${
@@ -33,13 +49,16 @@ export default function HomePage() {
 
       {/* Header Navigation */}
       <header className="relative z-100 flex items-center justify-between px-4 sm:px-6 py-4 lg:px-12">
-        <div className="flex items-center space-x-2 pl-3 sm:pl-6 lg:pl-12">
-          <img
-            src="/v0-logo.png"
-            alt="Logo"
-            className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12"
-          />
-        </div>
+        <button
+          type="button"
+          onClick={() => handleSectionChange("home")}
+          className="flex items-center pl-3 sm:pl-6 lg:pl-12 rounded-lg text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black/40"
+          aria-label="Home"
+        >
+          <span className="font-semibold tracking-tight text-2xl sm:text-3xl lg:text-4xl text-white select-none">
+            bitbw
+          </span>
+        </button>
 
         <nav className="hidden md:flex items-center space-x-6 lg:space-x-8">
         <button
@@ -188,10 +207,11 @@ export default function HomePage() {
               </h1>
 
               <p className="text-white/70 text-sm sm:text-base md:text-sm lg:text-2xl mb-6 sm:mb-8 max-w-2xl text-pretty">
-                I'm Bowen, a frontend engineer with 6+ years building production
-                apps in React, Vue, and TypeScript. I specialize in data
-                visualization, autonomous driving platforms, and exploring
-                AI-powered tools. Always learning, always shipping.
+                I'm Bowen, a frontend engineer with {careerYears}+ years
+                building production apps in React, Vue, and TypeScript. I
+                specialize in data visualization, autonomous driving platforms,
+                and exploring AI-powered tools. Always learning, always
+                shipping.
               </p>
 
               <Button
