@@ -60,7 +60,7 @@ export const copy: Record<Locale, Copy> = {
     viewResume: "View Resume",
     localeEn: "EN",
     localeZh: "中文",
-    roleBadge: "Bowen Zhang · Frontend Developer",
+    roleBadge: "Bowen Zhang · Senior Frontend Engineer",
     heroTitleLine1: "Building the Future",
     heroTitleLine2Prefix: "with",
     heroAccent: "Code&AI",
@@ -78,14 +78,15 @@ export const copy: Record<Locale, Copy> = {
     cardRecentTitle: "Recent Highlights",
     cardRecent1: "• Led Li Auto's smart chassis visualization platform",
     cardRecent2:
-      "• Built end-to-end project management systems with React & Vite",
-    cardRecent3: "• Shipped high-traffic Meituan map experiences",
+      "• Governed data Q&A—trusted, conversational answers across complex operational datasets",
+    cardRecent3:
+      "• Cockpit-grade in-vehicle delivery—real-time context into calm, production-ready experiences",
     cardDrivesTitle: "What Drives Me",
     cardDrivesBody:
       "Curiosity for emerging tech, especially AI. I love transforming complex requirements into experiences that feel effortless.",
     cardToolboxTitle: "Toolbox",
     cardToolboxBody:
-      "React, Vue, Next.js, Vite, ECharts, Three.js, Node.js, Electron, Ant Design, Quasar, Webpack, Vercel.",
+      "React, Vue, Next.js, Vite, ECharts, Three.js, Node.js, Electron, Tauri, Capacitor, Ant Design, Quasar, Webpack, Vercel, Python, Android.",
     contactBadge: "Contact",
     contactTitle: "Let's build something meaningful.",
     contactLead:
@@ -105,7 +106,7 @@ export const copy: Record<Locale, Copy> = {
     viewResume: "查看简历",
     localeEn: "EN",
     localeZh: "中文",
-    roleBadge: "张博文 · 前端开发",
+    roleBadge: "张博文 · 资深前端工程师",
     heroTitleLine1: "共筑未来",
     heroTitleLine2Prefix: "携手",
     heroAccent: "Code&AI",
@@ -122,14 +123,14 @@ export const copy: Record<Locale, Copy> = {
       "以 TypeScript 为先的工程实践、设计系统、数据可视化，以及帮助团队交付复杂软件的 AI 辅助工作流。",
     cardRecentTitle: "近期亮点",
     cardRecent1: "• 负责理想汽车智能底盘可视化平台",
-    cardRecent2: "• 使用 React 与 Vite 搭建端到端项目管理系统",
-    cardRecent3: "• 交付美团地图等高流量场景体验",
+    cardRecent2: "• 合规框架下的智能问数，将复杂数据沉淀为可信、可用的业务洞察",
+    cardRecent3: "• 智能座舱与车端交付：实时车况到稳定、可量产的座舱体验",
     cardDrivesTitle: "动力来源",
     cardDrivesBody:
       "对新兴技术（尤其是 AI）的好奇。我喜欢把复杂需求变成用起来毫不费力的体验。",
     cardToolboxTitle: "技术栈",
     cardToolboxBody:
-      "React、Vue、Next.js、Vite、ECharts、Three.js、Node.js、Electron、Ant Design、Quasar、Webpack、Vercel。",
+      "React、Vue、Next.js、Vite、ECharts、Three.js、Node.js、Electron、Tauri、Capacitor、Ant Design、Quasar、Webpack、Vercel、Python、Android。",
     contactBadge: "联系",
     contactTitle: "一起做点有意义的事。",
     contactLead:
