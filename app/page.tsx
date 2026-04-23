@@ -5,8 +5,13 @@ import { ArrowRight, Menu } from "lucide-react";
 import { LineShadowText } from "@/components/line-shadow-text";
 import { FlowingWaveOverlay } from "@/components/flowing-wave-overlay";
 import { ShimmerButton } from "@/components/shimmer-button";
+import { LocaleToggle } from "@/components/locale-toggle";
+import { useLocale } from "@/components/locale-provider";
 import { AnimatePresence, motion } from "motion/react";
-import { useState } from "react";
+import { useCallback, useState } from "react";
+
+const GITHUB_PROFILE = "https://github.com/bitbw";
+const GITHUB_REPOS = "https://github.com/bitbw?tab=repositories";
 
 /** Career start: October 2017 (used only for year count, not shown in copy). */
 const CAREER_START = new Date(2017, 9, 1);
@@ -23,12 +28,22 @@ function completedFullYearsSince(from: Date, asOf = new Date()): number {
 }
 
 export default function HomePage() {
+  const { t } = useLocale();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<
     "home" | "about" | "contact"
   >("home");
 
   const careerYears = completedFullYearsSince(CAREER_START);
+  const homeIntro = t.homeIntro.replaceAll("{years}", String(careerYears));
+
+  const openResume = useCallback(() => {
+    window.open(t.resumeUrl, "_blank");
+  }, [t.resumeUrl]);
+
+  const openGithubProfile = useCallback(() => {
+    window.open(GITHUB_PROFILE, "_blank");
+  }, []);
 
   const navButtonClass = (section: "home" | "about" | "contact") => {
     return `cursor-pointer transition-colors text-sm lg:text-base ${
@@ -53,7 +68,7 @@ export default function HomePage() {
           type="button"
           onClick={() => handleSectionChange("home")}
           className="flex items-center pl-3 sm:pl-6 lg:pl-12 rounded-lg text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black/40"
-          aria-label="Home"
+          aria-label={t.ariaHome}
         >
           <span className="font-semibold tracking-tight text-2xl sm:text-3xl lg:text-4xl text-white select-none">
             bitbw
@@ -61,30 +76,30 @@ export default function HomePage() {
         </button>
 
         <nav className="hidden md:flex items-center space-x-6 lg:space-x-8">
-        <button
-            key={"home"}
+          <button
+            key="home"
             type="button"
             onClick={() => handleSectionChange("home")}
             className={navButtonClass("home")}
           >
-            Home
+            {t.navHome}
           </button>
-         
+
           <button
-            key={"about"}
+            key="about"
             type="button"
             onClick={() => handleSectionChange("about")}
             className={navButtonClass("about")}
           >
-            About
+            {t.navAbout}
           </button>
           <button
-            key={"contact"}
+            key="contact"
             type="button"
             onClick={() => handleSectionChange("contact")}
             className={navButtonClass("contact")}
           >
-            Contact
+            {t.navContact}
           </button>
           <a
             href="https://blog.bitbw.top/"
@@ -92,57 +107,59 @@ export default function HomePage() {
             rel="noreferrer"
             className="text-white/80 hover:text-white transition-colors text-sm lg:text-base"
           >
-            Blog
+            {t.navBlog}
           </a>
           <a
-            href="https://github.com/bitbw"
+            href={GITHUB_REPOS}
             target="_blank"
             rel="noreferrer"
             className="text-white/80 hover:text-white transition-colors text-sm lg:text-base"
           >
-            Projects
+            {t.navProjects}
           </a>
-        
         </nav>
 
-        {/* Mobile menu button */}
-        <button
-          className="md:hidden text-white p-2"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-        >
-          <Menu className="w-6 h-6" />
-        </button>
+        <div className="flex md:hidden items-center gap-2">
+          <LocaleToggle />
+          <button
+            type="button"
+            className="text-white p-2"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-expanded={mobileMenuOpen}
+            aria-label="Menu"
+          >
+            <Menu className="w-6 h-6" />
+          </button>
+        </div>
 
-        <ShimmerButton
-          className="hidden md:flex bg-orange-500 hover:bg-orange-600 text-white px-4 lg:px-6 py-2 rounded-xl text-sm lg:text-base font-medium shadow-lg"
-          onClick={() => {
-            window.open(
-              "https://bitbw.notion.site/Bowen-Zhang-s-Resume-4a147165710948efa83f23ffd61303ec",
-              "_blank"
-            );
-          }}
-        >
-          View Resume
-        </ShimmerButton>
+        <div className="hidden md:flex items-center gap-3">
+          <LocaleToggle />
+          <ShimmerButton
+            className="bg-orange-500 hover:bg-orange-600 text-white px-4 lg:px-6 py-2 rounded-xl text-sm lg:text-base font-medium shadow-lg"
+            onClick={openGithubProfile}
+          >
+            {t.viewGithub}
+          </ShimmerButton>
+        </div>
       </header>
 
       {mobileMenuOpen && (
         <div className="md:hidden absolute top-16 left-0 right-0 bg-black/95 backdrop-blur-sm border-b border-white/10 z-20">
           <nav className="flex flex-col space-y-4 px-6 py-6">
             <a
-              href="https://github.com/bitbw"
+              href={GITHUB_REPOS}
               target="_blank"
               rel="noreferrer"
               className="text-white/80 hover:text-white transition-colors"
             >
-              Projects
+              {t.navProjects}
             </a>
             <button
               type="button"
               onClick={() => handleSectionChange("about")}
               className={`text-left ${navButtonClass("about")}`}
             >
-              About
+              {t.navAbout}
             </button>
             <a
               href="https://blog.bitbw.top/"
@@ -150,25 +167,20 @@ export default function HomePage() {
               rel="noreferrer"
               className="text-white/80 hover:text-white transition-colors"
             >
-              Blog
+              {t.navBlog}
             </a>
             <button
               type="button"
               onClick={() => handleSectionChange("contact")}
               className={`text-left ${navButtonClass("contact")}`}
             >
-              Contact
+              {t.navContact}
             </button>
             <ShimmerButton
               className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2.5 rounded-xl text-sm font-medium shadow-lg w-fit"
-              onClick={() => {
-                window.open(
-                  "https://bitbw.notion.site/Bowen-Zhang-s-Resume-4a147165710948efa83f23ffd61303ec",
-                  "_blank"
-                );
-              }}
+              onClick={openResume}
             >
-              View Resume
+              {t.viewResume}
             </ShimmerButton>
           </nav>
         </div>
@@ -189,29 +201,25 @@ export default function HomePage() {
               <div className="mb-4 sm:mb-8" id="about">
                 <div className="inline-flex items-center bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-3 sm:px-4 py-2">
                   <span className="text-white text-xs md:text-xs">
-                    Bowen Zhang · Frontend Developer
+                    {t.roleBadge}
                   </span>
                 </div>
               </div>
 
               <h1 className="text-white text-4xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-8xl font-bold leading-tight mb-4 sm:mb-6 text-balance">
-                Building the Future
+                {t.heroTitleLine1}
                 <br />
-                with{" "}
+                {t.heroTitleLine2Prefix}{" "}
                 <LineShadowText
                   className="italic font-light"
                   shadowColor="white"
                 >
-                  Code&AI
+                  {t.heroAccent}
                 </LineShadowText>
               </h1>
 
               <p className="text-white/70 text-sm sm:text-base md:text-sm lg:text-2xl mb-6 sm:mb-8 max-w-2xl text-pretty">
-                I'm Bowen, a frontend engineer with {careerYears}+ years
-                building production apps in React, Vue, and TypeScript. I
-                specialize in data visualization, autonomous driving platforms,
-                and exploring AI-powered tools. Always learning, always
-                shipping.
+                {homeIntro}
               </p>
 
               <Button
@@ -219,12 +227,12 @@ export default function HomePage() {
                 className="cursor-pointer group relative bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg text-sm sm:text-base md:text-xs lg:text-lg font-semibold flex items-center gap-2 backdrop-blur-sm border border-orange-400/30 shadow-lg shadow-orange-500/25 hover:shadow-xl hover:shadow-orange-500/40 transition-all duration-300 hover:scale-105 hover:-translate-y-0.5"
               >
                 <a
-                  href="https://github.com/bitbw"
+                  href={GITHUB_PROFILE}
                   target="_blank"
                   rel="noreferrer"
-                  aria-label="Visit Bowen's GitHub profile"
+                  aria-label={t.viewGithubAria}
                 >
-                  View GitHub
+                  {t.viewGithub}
                   <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 group-hover:-rotate-12 transition-transform duration-300" />
                   <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-white/0 via-white/10 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </a>
@@ -243,65 +251,58 @@ export default function HomePage() {
             >
               <div className="inline-flex items-center bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-3 sm:px-4 py-2 w-fit">
                 <span className="text-white text-xs md:text-xs">
-                  About Bowen
+                  {t.aboutBadge}
                 </span>
               </div>
               <h2 className="text-white text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight">
-                Developer, technologist, relentless learner.
+                {t.aboutTitle}
               </h2>
               <p className="text-white/70 text-base sm:text-lg lg:text-xl max-w-3xl">
-                I craft human-centered interfaces and data-rich dashboards
-                across automotive, mapping, and enterprise products. From CAN
-                bus visualizers to large-scale management platforms, I bridge
-                product vision with performant frontends that teams can scale
-                and maintain.
+                {t.aboutLead}
               </p>
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="bg-white/5 border border-white/10 rounded-2xl p-5 sm:p-6">
                   <h3 className="text-white text-lg font-semibold mb-2">
-                    Core Focus
+                    {t.cardCoreTitle}
                   </h3>
                   <p className="text-white/70 text-sm leading-relaxed">
-                    TypeScript-first development, design systems, data
-                    visualization, and AI-assisted workflows for teams shipping
-                    ambitious software.
+                    {t.cardCoreBody}
                   </p>
                 </div>
                 <div className="bg-white/5 border border-white/10 rounded-2xl p-5 sm:p-6">
                   <h3 className="text-white text-lg font-semibold mb-2">
-                    Recent Highlights
+                    {t.cardRecentTitle}
                   </h3>
                   <ul className="space-y-2 text-white/70 text-sm leading-relaxed">
-                    <li>
-                      • Led Li Auto's smart chassis visualization platform
-                    </li>
-                    <li>
-                      • Built end-to-end project management systems with React &
-                      Vite
-                    </li>
-                    <li>• Shipped high-traffic Meituan map experiences</li>
+                    <li>{t.cardRecent1}</li>
+                    <li>{t.cardRecent2}</li>
+                    <li>{t.cardRecent3}</li>
                   </ul>
                 </div>
                 <div className="bg-white/5 border border-white/10 rounded-2xl p-5 sm:p-6">
                   <h3 className="text-white text-lg font-semibold mb-2">
-                    What Drives Me
+                    {t.cardDrivesTitle}
                   </h3>
                   <p className="text-white/70 text-sm leading-relaxed">
-                    Curiosity for emerging tech, especially AI. I love
-                    transforming complex requirements into experiences that feel
-                    effortless.
+                    {t.cardDrivesBody}
                   </p>
                 </div>
                 <div className="bg-white/5 border border-white/10 rounded-2xl p-5 sm:p-6">
                   <h3 className="text-white text-lg font-semibold mb-2">
-                    Toolbox
+                    {t.cardToolboxTitle}
                   </h3>
                   <p className="text-white/70 text-sm leading-relaxed">
-                    React, Vue, Next.js, Vite, ECharts, Three.js, Node.js,
-                    Electron, Ant Design, Quasar, Webpack, Vercel.
+                    {t.cardToolboxBody}
                   </p>
                 </div>
               </div>
+              <button
+                type="button"
+                className="w-fit rounded-full border border-white/20 bg-white/10 px-5 py-2.5 text-sm font-semibold text-white hover:bg-white/20 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black/40"
+                onClick={openResume}
+              >
+                {t.viewResume}
+              </button>
             </motion.div>
           )}
 
@@ -315,34 +316,34 @@ export default function HomePage() {
               className="w-full"
             >
               <div className="inline-flex items-center bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-3 sm:px-4 py-2 w-fit mb-6">
-                <span className="text-white text-xs md:text-xs">Contact</span>
+                <span className="text-white text-xs md:text-xs">
+                  {t.contactBadge}
+                </span>
               </div>
               <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 sm:p-12">
                 <h2 className="text-white text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">
-                  Let's build something meaningful.
+                  {t.contactTitle}
                 </h2>
                 <p className="text-white/70 text-base sm:text-lg lg:text-xl mb-8 max-w-2xl">
-                  Whether you’re exploring partnerships, need help shipping a
-                  complex interface, or want to talk about AI-augmented
-                  workflows, my inbox is open.
+                  {t.contactLead}
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
                   <Button
                     asChild
                     className="bg-white/10 hover:bg-white/20 text-white border border-white/20 px-6 py-3 rounded-lg text-base font-medium transition-all duration-300"
                   >
-                    <a href="mailto:mail.bitbw@gmail.com">Email Me</a>
+                    <a href="mailto:mail.bitbw@gmail.com">{t.emailMe}</a>
                   </Button>
                   <Button
                     asChild
                     className="bg-white/10 hover:bg-white/20 text-white border border-white/20 px-6 py-3 rounded-lg text-base font-medium transition-all duration-300"
                   >
                     <a
-                      href="https://github.com/bitbw"
+                      href={GITHUB_PROFILE}
                       target="_blank"
                       rel="noreferrer"
                     >
-                      GitHub
+                      {t.linkGithub}
                     </a>
                   </Button>
                   <Button
@@ -354,7 +355,7 @@ export default function HomePage() {
                       target="_blank"
                       rel="noreferrer"
                     >
-                      Blog
+                      {t.linkBlog}
                     </a>
                   </Button>
                 </div>
