@@ -10,6 +10,9 @@ import { useLocale } from "@/components/locale-provider";
 import { AnimatePresence, motion } from "motion/react";
 import { useCallback, useState } from "react";
 
+const GITHUB_PROFILE = "https://github.com/bitbw";
+const GITHUB_REPOS = "https://github.com/bitbw?tab=repositories";
+
 /** Career start: October 2017 (used only for year count, not shown in copy). */
 const CAREER_START = new Date(2017, 9, 1);
 
@@ -37,6 +40,10 @@ export default function HomePage() {
   const openResume = useCallback(() => {
     window.open(t.resumeUrl, "_blank");
   }, [t.resumeUrl]);
+
+  const openGithubProfile = useCallback(() => {
+    window.open(GITHUB_PROFILE, "_blank");
+  }, []);
 
   const navButtonClass = (section: "home" | "about" | "contact") => {
     return `cursor-pointer transition-colors text-sm lg:text-base ${
@@ -103,7 +110,7 @@ export default function HomePage() {
             {t.navBlog}
           </a>
           <a
-            href="https://github.com/bitbw"
+            href={GITHUB_REPOS}
             target="_blank"
             rel="noreferrer"
             className="text-white/80 hover:text-white transition-colors text-sm lg:text-base"
@@ -129,9 +136,9 @@ export default function HomePage() {
           <LocaleToggle />
           <ShimmerButton
             className="bg-orange-500 hover:bg-orange-600 text-white px-4 lg:px-6 py-2 rounded-xl text-sm lg:text-base font-medium shadow-lg"
-            onClick={openResume}
+            onClick={openGithubProfile}
           >
-            {t.viewResume}
+            {t.viewGithub}
           </ShimmerButton>
         </div>
       </header>
@@ -140,7 +147,7 @@ export default function HomePage() {
         <div className="md:hidden absolute top-16 left-0 right-0 bg-black/95 backdrop-blur-sm border-b border-white/10 z-20">
           <nav className="flex flex-col space-y-4 px-6 py-6">
             <a
-              href="https://github.com/bitbw"
+              href={GITHUB_REPOS}
               target="_blank"
               rel="noreferrer"
               className="text-white/80 hover:text-white transition-colors"
@@ -220,7 +227,7 @@ export default function HomePage() {
                 className="cursor-pointer group relative bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg text-sm sm:text-base md:text-xs lg:text-lg font-semibold flex items-center gap-2 backdrop-blur-sm border border-orange-400/30 shadow-lg shadow-orange-500/25 hover:shadow-xl hover:shadow-orange-500/40 transition-all duration-300 hover:scale-105 hover:-translate-y-0.5"
               >
                 <a
-                  href="https://github.com/bitbw"
+                  href={GITHUB_PROFILE}
                   target="_blank"
                   rel="noreferrer"
                   aria-label={t.viewGithubAria}
@@ -332,7 +339,7 @@ export default function HomePage() {
                     className="bg-white/10 hover:bg-white/20 text-white border border-white/20 px-6 py-3 rounded-lg text-base font-medium transition-all duration-300"
                   >
                     <a
-                      href="https://github.com/bitbw"
+                      href={GITHUB_PROFILE}
                       target="_blank"
                       rel="noreferrer"
                     >
