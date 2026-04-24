@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Menu } from "lucide-react";
+import { ArrowRight, ExternalLink, Menu } from "lucide-react";
 import { LineShadowText } from "@/components/line-shadow-text";
 import { FlowingWaveOverlay } from "@/components/flowing-wave-overlay";
 import { ShimmerButton } from "@/components/shimmer-button";
@@ -12,6 +12,39 @@ import { useCallback, useState } from "react";
 
 const GITHUB_PROFILE = "https://github.com/bitbw";
 const GITHUB_REPOS = "https://github.com/bitbw?tab=repositories";
+
+const PROJECTS = [
+  {
+    url: "https://english-read.bitbw.top/",
+    nameKey: "proj1Name",
+    descKey: "proj1Desc",
+    tech: "React · TypeScript",
+  },
+  {
+    url: "https://nextaichatbox.bitbw.top/",
+    nameKey: "proj2Name",
+    descKey: "proj2Desc",
+    tech: "Next.js · AI · TypeScript",
+  },
+  {
+    url: "https://antd-pro-editable-table.vercel.app/",
+    nameKey: "proj3Name",
+    descKey: "proj3Desc",
+    tech: "Ant Design Pro · React",
+  },
+  {
+    url: "https://blog.bitbw.top/",
+    nameKey: "proj4Name",
+    descKey: "proj4Desc",
+    tech: "Hexo · Markdown",
+  },
+  {
+    url: "https://fuxi-domain-control-ui-app.bitbw.top/",
+    nameKey: "proj5Name",
+    descKey: "proj5Desc",
+    tech: "React · Vite · TypeScript",
+  },
+] as const;
 
 /** Career start: October 2017 (used only for year count, not shown in copy). */
 const CAREER_START = new Date(2017, 9, 1);
@@ -31,7 +64,7 @@ export default function HomePage() {
   const { t } = useLocale();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<
-    "home" | "about" | "contact"
+    "home" | "about" | "contact" | "projects"
   >("home");
 
   const careerYears = completedFullYearsSince(CAREER_START);
@@ -45,7 +78,7 @@ export default function HomePage() {
     window.open(GITHUB_PROFILE, "_blank");
   }, []);
 
-  const navButtonClass = (section: "home" | "about" | "contact") => {
+  const navButtonClass = (section: "home" | "about" | "contact" | "projects") => {
     return `cursor-pointer transition-colors text-sm lg:text-base ${
       activeSection === section
         ? "text-white"
@@ -53,7 +86,7 @@ export default function HomePage() {
     }`;
   };
 
-  const handleSectionChange = (section: "home" | "about" | "contact") => {
+  const handleSectionChange = (section: "home" | "about" | "contact" | "projects") => {
     setActiveSection(section);
     setMobileMenuOpen(false);
   };
@@ -109,14 +142,14 @@ export default function HomePage() {
           >
             {t.navBlog}
           </a>
-          <a
-            href={GITHUB_REPOS}
-            target="_blank"
-            rel="noreferrer"
-            className="text-white/80 hover:text-white transition-colors text-sm lg:text-base"
+          <button
+            key="projects"
+            type="button"
+            onClick={() => handleSectionChange("projects")}
+            className={navButtonClass("projects")}
           >
             {t.navProjects}
-          </a>
+          </button>
         </nav>
 
         <div className="flex md:hidden items-center gap-2">
@@ -146,14 +179,13 @@ export default function HomePage() {
       {mobileMenuOpen && (
         <div className="md:hidden absolute top-16 left-0 right-0 bg-black/95 backdrop-blur-sm border-b border-white/10 z-20">
           <nav className="flex flex-col space-y-4 px-6 py-6">
-            <a
-              href={GITHUB_REPOS}
-              target="_blank"
-              rel="noreferrer"
-              className="text-white/80 hover:text-white transition-colors"
+            <button
+              type="button"
+              onClick={() => handleSectionChange("projects")}
+              className={`text-left ${navButtonClass("projects")}`}
             >
               {t.navProjects}
-            </a>
+            </button>
             <button
               type="button"
               onClick={() => handleSectionChange("about")}
@@ -360,6 +392,67 @@ export default function HomePage() {
                   </Button>
                 </div>
               </div>
+            </motion.div>
+          )}
+
+          {activeSection === "projects" && (
+            <motion.div
+              key="projects"
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -24 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+              className="flex flex-col gap-6 lg:gap-8 w-full"
+            >
+              <div className="inline-flex items-center bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-3 sm:px-4 py-2 w-fit">
+                <span className="text-white text-xs md:text-xs">
+                  {t.projectsBadge}
+                </span>
+              </div>
+              <h2 className="text-white text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight">
+                {t.projectsTitle}
+              </h2>
+              <p className="text-white/70 text-base sm:text-lg lg:text-xl max-w-3xl">
+                {t.projectsLead}
+              </p>
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {PROJECTS.map((project) => (
+                  <div
+                    key={project.url}
+                    className="group bg-white/5 border border-white/10 rounded-2xl p-5 sm:p-6 flex flex-col gap-3 hover:bg-white/10 hover:border-white/20 transition-all duration-300"
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <h3 className="text-white text-base font-semibold leading-snug">
+                        {t[project.nameKey]}
+                      </h3>
+                      <a
+                        href={project.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        aria-label={t[project.nameKey]}
+                        className="shrink-0 text-white/40 hover:text-white transition-colors mt-0.5"
+                      >
+                        <ExternalLink className="w-4 h-4" />
+                      </a>
+                    </div>
+                    <p className="text-white/60 text-sm leading-relaxed flex-1">
+                      {t[project.descKey]}
+                    </p>
+                    <span className="inline-block text-xs text-white/40 font-mono">
+                      {project.tech}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <a
+                href={GITHUB_REPOS}
+                target="_blank"
+                rel="noreferrer"
+                className="w-fit inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-5 py-2.5 text-sm font-semibold text-white hover:bg-white/20 transition-colors"
+              >
+                {t.projectsViewAll}
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
             </motion.div>
           )}
         </AnimatePresence>

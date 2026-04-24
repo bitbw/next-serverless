@@ -47,6 +47,21 @@ export type Copy = {
   linkGithub: string;
   linkBlog: string;
   resumeUrl: string;
+  projectsBadge: string;
+  projectsTitle: string;
+  projectsLead: string;
+  projectsVisit: string;
+  projectsViewAll: string;
+  proj1Name: string;
+  proj1Desc: string;
+  proj2Name: string;
+  proj2Desc: string;
+  proj3Name: string;
+  proj3Desc: string;
+  proj4Name: string;
+  proj4Desc: string;
+  proj5Name: string;
+  proj5Desc: string;
 };
 
 export const copy: Record<Locale, Copy> = {
@@ -95,6 +110,27 @@ export const copy: Record<Locale, Copy> = {
     linkGithub: "GitHub",
     linkBlog: "Blog",
     resumeUrl: RESUME_EN,
+    projectsBadge: "My Projects",
+    projectsTitle: "Things I've built.",
+    projectsLead:
+      "A selection of personal projects and side experiments — from AI tools to developer utilities and platform UIs.",
+    projectsVisit: "Visit Project",
+    projectsViewAll: "View all on GitHub",
+    proj1Name: "English Reading App",
+    proj1Desc:
+      "An English reading practice tool designed to improve reading comprehension and vocabulary through curated articles.",
+    proj2Name: "AI Chatbox",
+    proj2Desc:
+      "A Next.js-powered AI chat application with streaming responses, multi-turn conversations, and a clean minimal UI.",
+    proj3Name: "Editable Table Demo",
+    proj3Desc:
+      "An interactive Ant Design Pro editable table component showcasing inline editing, validation, and row operations.",
+    proj4Name: "Personal Blog",
+    proj4Desc:
+      "My personal tech blog covering frontend development, tooling, engineering insights, and side-project write-ups.",
+    proj5Name: "Smart Chassis Domain Control UI",
+    proj5Desc:
+      "A vehicle domain control UI application built for the Fuxi smart driving platform, focusing on real-time data display.",
   },
   zh: {
     ariaHome: "首页",
@@ -139,6 +175,27 @@ export const copy: Record<Locale, Copy> = {
     linkGithub: "GitHub",
     linkBlog: "博客",
     resumeUrl: RESUME_ZH,
+    projectsBadge: "我的项目",
+    projectsTitle: "我构建过的作品。",
+    projectsLead:
+      "个人项目与技术实验精选——涵盖 AI 工具、开发者工具和平台 UI。",
+    projectsVisit: "访问项目",
+    projectsViewAll: "在 GitHub 查看全部",
+    proj1Name: "英语阅读应用",
+    proj1Desc:
+      "一款英语阅读练习工具，通过精选文章帮助提升阅读理解能力与词汇量。",
+    proj2Name: "AI 聊天应用",
+    proj2Desc:
+      "基于 Next.js 的 AI 对话应用，支持流式响应、多轮对话与简洁 UI。",
+    proj3Name: "可编辑表格 Demo",
+    proj3Desc:
+      "基于 Ant Design Pro 的交互式可编辑表格示例，展示行内编辑、数据校验与行操作。",
+    proj4Name: "个人技术博客",
+    proj4Desc:
+      "分享前端开发、工程实践与技术洞察的个人博客，包含各类项目复盘。",
+    proj5Name: "智能底盘域控 UI",
+    proj5Desc:
+      "用于伏羲智能驾驶平台的车端域控 UI 应用，专注于实时数据展示与交互。",
   },
 };
 
