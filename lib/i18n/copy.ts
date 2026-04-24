@@ -62,6 +62,8 @@ export type Copy = {
   proj4Desc: string;
   proj5Name: string;
   proj5Desc: string;
+  proj6Name: string;
+  proj6Desc: string;
 };
 
 export const copy: Record<Locale, Copy> = {
@@ -131,6 +133,9 @@ export const copy: Record<Locale, Copy> = {
     proj5Name: "Smart Chassis Domain Control UI",
     proj5Desc:
       "A vehicle domain control UI application built for the Fuxi smart driving platform, focusing on real-time data display.",
+    proj6Name: "Smart Chassis Preview Info",
+    proj6Desc:
+      "A multi-platform app (Web + Android via Capacitor) that interfaces with vehicle CarProperty signals to visualize real-time preview road features and vertical acceleration chassis data in 3D.",
   },
   zh: {
     ariaHome: "首页",
@@ -196,6 +201,9 @@ export const copy: Record<Locale, Copy> = {
     proj5Name: "智能底盘域控 UI",
     proj5Desc:
       "用于伏羲智能驾驶平台的车端域控 UI 应用，专注于实时数据展示与交互。",
+    proj6Name: "智能底盘预瞄信息",
+    proj6Desc:
+      "多平台应用（Web + Android，基于 Capacitor），对接车辆 CarProperty 信号，实时展示预瞄路面特征与垂向加速度等底盘数据，支持 Three.js 3D 可视化。",
   },
 };
 

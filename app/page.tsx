@@ -15,10 +15,16 @@ const GITHUB_REPOS = "https://github.com/bitbw?tab=repositories";
 
 const PROJECTS = [
   {
-    url: "https://english-read.bitbw.top/",
-    nameKey: "proj1Name",
-    descKey: "proj1Desc",
-    tech: "React · TypeScript",
+    url: "https://capacitor-hu-previewinfo.bitbw.top/",
+    nameKey: "proj6Name",
+    descKey: "proj6Desc",
+    tech: "Vue 3 · Three.js · ECharts · Capacitor",
+  },
+  {
+    url: "https://fuxi-domain-control-ui-app.bitbw.top/",
+    nameKey: "proj5Name",
+    descKey: "proj5Desc",
+    tech: "React · Vite · TypeScript",
   },
   {
     url: "https://nextaichatbox.bitbw.top/",
@@ -27,10 +33,10 @@ const PROJECTS = [
     tech: "Next.js · AI · TypeScript",
   },
   {
-    url: "https://antd-pro-editable-table.vercel.app/",
-    nameKey: "proj3Name",
-    descKey: "proj3Desc",
-    tech: "Ant Design Pro · React",
+    url: "https://english-read.bitbw.top/",
+    nameKey: "proj1Name",
+    descKey: "proj1Desc",
+    tech: "React · TypeScript",
   },
   {
     url: "https://blog.bitbw.top/",
@@ -39,10 +45,10 @@ const PROJECTS = [
     tech: "Hexo · Markdown",
   },
   {
-    url: "https://fuxi-domain-control-ui-app.bitbw.top/",
-    nameKey: "proj5Name",
-    descKey: "proj5Desc",
-    tech: "React · Vite · TypeScript",
+    url: "https://antd-pro-editable-table.vercel.app/",
+    nameKey: "proj3Name",
+    descKey: "proj3Desc",
+    tech: "Ant Design Pro · React",
   },
 ] as const;
 
